@@ -12,6 +12,8 @@ struct Counter{
     count: u32
 }
 
+
+#[derive(BorshSerialize,BorshDeserialize)]
 enum InstructionType {
     Increment(u32),
     Decrement(u32)
@@ -32,21 +34,23 @@ pub fn counter_contract(
 
    let mut converted_data = Counter::try_from_slice(&acc.data.borrow())?;
 
-   match instruction_data {
+   match Instruction_data {
 
        InstructionType::Increment(value)=> {
         msg!("Increment Value");
         converted_data.count += value
-       }
+       },
 
         InstructionType::Decrement(value)=> {
         msg!("Decrement Value");
         converted_data.count -= value
-       }
+       },
    }
 
    converted_data.serialize(&mut *acc.data.borrow_mut());
 
    msg!("Done with the contract");
+
+   Ok(())
 
 }
